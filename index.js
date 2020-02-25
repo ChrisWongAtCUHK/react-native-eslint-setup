@@ -9,10 +9,27 @@ const log = console.log;
 
 const jsonfile = require('jsonfile');
 
-jsonfile.readFile('package.json', (err, data) => {
+const file = 'package.json';
+
+jsonfile.readFile(file, (err, data) => {
 	if (err) {
 		error(err);
 	}
+	let devDependencies = data.devDependencies ? data.devDependencies : {};
 
-	log(data);
+	if(!devDependencies['babel-eslint']) {
+		devDependencies['babel-eslint'] = '^10.0.3';
+	}
+
+	if(!devDependencies['eslint']) {
+		devDependencies['eslint'] = '^6.8.0';
+	}
+	data.devDependencies = devDependencies;
+
+	jsonfile.writeFile(file, data, { EOL: '\n', spaces: 2 })
+		.then((res) => {
+			if(!res)
+			log(`${file} is changed.`);
+		})
+		.catch((e) => error(e))
 });
