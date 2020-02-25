@@ -32,8 +32,6 @@ module.exports = {
         "consistent-this": "error",
         "curly": "error",
         "default-case": "error",
-        "dot-location": "error",
-        "dot-notation": "error",
         "eol-last": "error",
         "eqeqeq": "error",
         "func-call-spacing": "error",
@@ -73,7 +71,6 @@ module.exports = {
             "always"
         ],
         "newline-before-return": "error",
-        "newline-per-chained-call": "error",
         "no-alert": "error",
         "no-array-constructor": "error",
         "no-bitwise": "error",
@@ -168,7 +165,6 @@ module.exports = {
             "error",
             "always"
         ],
-        "object-property-newline": "error",
         "object-shorthand": "error",
         "one-var": ["error", { var: "always" }],
         "one-var-declaration-per-line": "error",
@@ -182,11 +178,6 @@ module.exports = {
         "prefer-rest-params": "error",
         "prefer-spread": "error",
         "prefer-template": "error",
-        "quote-props": "error",
-        "quotes": [
-            "error",
-            "single"
-        ],
         "radix": "error",
         "require-jsdoc": "error",
         "rest-spread-spacing": "error",
