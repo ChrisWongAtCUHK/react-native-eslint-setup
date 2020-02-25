@@ -1,0 +1,15 @@
+{
+  "name": "react-native-eslint-setup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "bin": {
+	"rnsetup": "./index.js"
+  },
+  "keywords": [],
+  "author": "Chris Wong <wc38.wong@gmail.com>",
+  "license": "ISC"
+}
