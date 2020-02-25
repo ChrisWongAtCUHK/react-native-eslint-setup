@@ -3,15 +3,15 @@
 /* eslint-disable no-console */
 
 const fs = require('fs');
+const merge = require('lodash.merge');
 const eslintJson = require('./.eslintrc.json');
 const error = console.error;
 const log = console.log;
 
 /* eslint-disable no-console */
 
-const jsonfile = require('jsonfile');
-
 const file = 'package.json';
+let jsonfile = require('jsonfile');
 
 // Generate .eslintrc.json if necessary
 
@@ -44,18 +44,32 @@ jsonfile.readFile(file, (err, data) => {
 	jsonfile.writeFile(file, data, { EOL: '\n', spaces: 2 })
 		.then((res) => {
 			if(!res)
-			log(`${file} is changed.`);
+			log(`${file} is modified.`);
 		})
-		.catch((e) => error(e))
+		.catch((e) => error(e));
 });
 
 // check if .eslintrc.json exists
 // if yes, merge
-// if no, add
+// if no, generate
 const eslintJsonName = './.eslintrc.json';
 
 if(fs.existsSync(eslintJsonName)){
+	jsonfile.readFile(eslintJsonName, (err, data) => {
+		if(err) {
+			error(err);
+		}
 
+		// merge
+		data = merge(data, eslintJson);
+		jsonfile.writeFile(eslintJsonName, data, { EOL: '\n', spaces: 2 })
+			.then((res) => {
+				if(!res) {
+					log(`${eslintJsonName} is modified.`);
+				}
+			})
+			.catch((e) => error(e));
+	});
 } else {
 	jsonfile.writeFile(eslintJsonName, eslintJson, { EOL: '\n', spaces: 2 })
 		.then((res) => {
@@ -63,4 +77,5 @@ if(fs.existsSync(eslintJsonName)){
 				log(`${eslintJsonName} is added.`);
 			}
 		})
+		.catch((e) => error(e));
 }

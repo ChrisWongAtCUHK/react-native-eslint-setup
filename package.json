@@ -9,10 +9,18 @@
   "bin": {
     "rn-eslint-setup": "./src/index.js"
   },
-  "keywords": ["command", "react-native"],
+  "keywords": [
+    "command",
+    "react-native"
+  ],
   "author": "Chris Wong <wc38.wong@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "jsonfile": "^6.0.0"
+    "jsonfile": "^6.0.0",
+    "lodash.merge": "^4.6.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0"
   }
 }
