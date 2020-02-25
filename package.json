@@ -1,7 +1,7 @@
 {
   "name": "react-native-eslint-setup",
   "version": "1.0.0",
-  "description": "",
+  "description": "Command line tool to set up React Native ESLint with minimal config",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -9,7 +9,7 @@
   "bin": {
     "rn-eslint-setup": "./index.js"
   },
-  "keywords": [],
+  "keywords": ["command", "react-native"],
   "author": "Chris Wong <wc38.wong@gmail.com>",
   "license": "ISC",
   "dependencies": {
