@@ -7,9 +7,12 @@
     "start": "node index.js"
   },
   "bin": {
-	"rnsetup": "./index.js"
+    "rn-eslint-setup": "./index.js"
   },
   "keywords": [],
   "author": "Chris Wong <wc38.wong@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jsonfile": "^6.0.0"
+  }
 }

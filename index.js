@@ -1,13 +1,18 @@
 #!/usr/bin/env node
-// eslint-disable-next-line no-console
+
+/* eslint-disable no-console */
+
+const error = console.error;
 const log = console.log;
-const fs = require('fs');
 
-fs.readFile('package.json', (err, data) => {
+/* eslint-disable no-console */
+
+const jsonfile = require('jsonfile');
+
+jsonfile.readFile('package.json', (err, data) => {
 	if (err) {
-		log(err);
+		error(err);
 	}
-  let pkg = JSON.parse(data);
 
-	log(pkg);
+	log(data);
 });
