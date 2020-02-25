@@ -2,6 +2,8 @@
 
 /* eslint-disable no-console */
 
+const fs = require('fs');
+const eslintJson = require('./.eslintrc.json');
 const error = console.error;
 const log = console.log;
 
@@ -10,6 +12,8 @@ const log = console.log;
 const jsonfile = require('jsonfile');
 
 const file = 'package.json';
+
+// Generate .eslintrc.json if necessary
 
 // read package.json
 jsonfile.readFile(file, (err, data) => {
@@ -44,3 +48,19 @@ jsonfile.readFile(file, (err, data) => {
 		})
 		.catch((e) => error(e))
 });
+
+// check if .eslintrc.json exists
+// if yes, merge
+// if no, add
+const eslintJsonName = './.eslintrc.json';
+
+if(fs.existsSync(eslintJsonName)){
+
+} else {
+	jsonfile.writeFile(eslintJsonName, eslintJson, { EOL: '\n', spaces: 2 })
+		.then((res) => {
+			if(!res){
+				log(`${eslintJsonName} is added.`);
+			}
+		})
+}
