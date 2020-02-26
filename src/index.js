@@ -4,7 +4,9 @@ const fs = require('fs');
 const merge = require('lodash.merge');
 const co = require('co');
 const npminstall = require('npminstall');
+const jsonfile = require('jsonfile');
 const eslintJson = require('./.eslintrc.json');
+const settingsJson = require('./.vscode/settings.json');
 
 /* eslint-disable no-console */
 
@@ -13,8 +15,39 @@ const log = console.log;
 
 /* eslint-disable no-console */
 
+// check if json exists
+// if yes, merge
+// if no, generate
+const mergeJson = (jsonFileName, jsonObj) => {
+	if(fs.existsSync(jsonFileName)){
+		jsonfile.readFile(jsonFileName, (err, data) => {
+			if(err) {
+				error(err);
+			}
+
+			// merge
+			data = merge(data, jsonObj);
+			jsonfile.writeFile(jsonFileName, data, { EOL: '\n', spaces: 2 })
+				.then((res) => {
+					if(!res) {
+						log(`${jsonFileName} is modified.`);
+					}
+				})
+				.catch((e) => error(e));
+		});
+	} else {
+		// generate
+		jsonfile.writeFile(jsonFileName, jsonObj, { EOL: '\n', spaces: 2 })
+			.then((res) => {
+				if(!res){
+					log(`${jsonFileName} is added.`);
+				}
+			})
+			.catch((e) => error(e.stack));
+	}
+};
+
 const file = 'package.json';
-let jsonfile = require('jsonfile');
 
 // read package.json
 jsonfile.readFile(file, (err, data) => {
@@ -63,34 +96,12 @@ jsonfile.readFile(file, (err, data) => {
 		.catch((e) => error(e.stack));
 });
 
+// Merge or generate .eslintrc.json 
+mergeJson('./.eslintrc.json', eslintJson);
 
-// check if .eslintrc.json exists
-// if yes, merge
-// if no, generate
-const eslintJsonName = './.eslintrc.json';
-
-if(fs.existsSync(eslintJsonName)){
-	jsonfile.readFile(eslintJsonName, (err, data) => {
-		if(err) {
-			error(err);
-		}
-
-		// merge
-		data = merge(data, eslintJson);
-		jsonfile.writeFile(eslintJsonName, data, { EOL: '\n', spaces: 2 })
-			.then((res) => {
-				if(!res) {
-					log(`${eslintJsonName} is modified.`);
-				}
-			})
-			.catch((e) => error(e));
-	});
-} else {
-	jsonfile.writeFile(eslintJsonName, eslintJson, { EOL: '\n', spaces: 2 })
-		.then((res) => {
-			if(!res){
-				log(`${eslintJsonName} is added.`);
-			}
-		})
-		.catch((e) => error(e.stack));
+// Merge or generate .vscode/settings.json 
+const vscodeDir = './.vscode';
+if(!fs.existsSync(vscodeDir)) {
+	fs.mkdirSync(vscodeDir);
 }
+mergeJson(`${vscodeDir}/settings.json`, settingsJson);
