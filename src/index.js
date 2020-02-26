@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-console */
-
 const fs = require('fs');
 const merge = require('lodash.merge');
+const co = require('co');
+const npminstall = require('npminstall');
 const eslintJson = require('./.eslintrc.json');
+
+/* eslint-disable no-console */
+
 const error = console.error;
 const log = console.log;
 
@@ -13,12 +16,10 @@ const log = console.log;
 const file = 'package.json';
 let jsonfile = require('jsonfile');
 
-// Generate .eslintrc.json if necessary
-
 // read package.json
 jsonfile.readFile(file, (err, data) => {
 	if (err) {
-		error(err);
+		error(err.stack);
 	}
 	// read devDependencies, create if not exist
 	let devDependencies = data.devDependencies ? data.devDependencies : {};
@@ -29,6 +30,10 @@ jsonfile.readFile(file, (err, data) => {
 
 	if(!devDependencies['eslint']) {
 		devDependencies['eslint'] = '^6.8.0';
+	}
+
+	if(!devDependencies['eslint-plugin-react']) {
+		devDependencies['eslint-plugin-react'] = '^7.18.3';
 	}
 
 	// sort by keys
@@ -44,10 +49,20 @@ jsonfile.readFile(file, (err, data) => {
 	jsonfile.writeFile(file, data, { EOL: '\n', spaces: 2 })
 		.then((res) => {
 			if(!res)
-			log(`${file} is modified.`);
+				log(`${file} is modified.`);
+			
+			// install
+			co(function* () {
+				yield npminstall({
+					root: process.cwd()
+				});
+			}).catch((e) => {
+					error(e.stack);
+			});
 		})
-		.catch((e) => error(e));
+		.catch((e) => error(e.stack));
 });
+
 
 // check if .eslintrc.json exists
 // if yes, merge
@@ -77,5 +92,5 @@ if(fs.existsSync(eslintJsonName)){
 				log(`${eslintJsonName} is added.`);
 			}
 		})
-		.catch((e) => error(e));
+		.catch((e) => error(e.stack));
 }
